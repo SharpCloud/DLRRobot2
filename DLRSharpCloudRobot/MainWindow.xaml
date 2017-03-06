@@ -1,0 +1,181 @@
+﻿<Window x:Class="DLRSharpCloudRobot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DLRSharpCloudRobot"
+        xmlns:converters="clr-namespace:DLRSharpCloudRobot.Converters"
+        xmlns:viewModels="clr-namespace:DLRSharpCloudRobot.ViewModels"
+        mc:Ignorable="d"
+        Title="SharpCloud DLR Robot v2.0" MinHeight="450" MinWidth="625" Height="450" Width="625" Background="Black" FontSize="18">
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:BoolToVisibility x:Key="BoolToVisibility" />
+        <converters:BoolToCollapsed x:Key="BoolToCollapsed" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition  Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Background="#99000000" Grid.RowSpan="2" ZIndex="10" Visibility="{Binding ShowWaitForm, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF00AFFC" Text="Processing..."  />
+                <Button Background="Transparent" Foreground="White" Height="40" FontSize="12"  HorizontalAlignment="Center" Content="   Cancel   " Click="Cancel_Click"/>
+            </StackPanel>
+        </Grid>
+        
+        <TabControl Background="#333333" x:Name="mainTab">
+            <TabControl.Resources>
+                <Style TargetType="TabControl">
+                    <Setter Property="IsTabStop" Value="False"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="#404040"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="0"/>
+
+                </Style>
+                <Style TargetType="TabItem">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Grid x:Name="gdBorder" Background="#333333">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Name="Border" BorderThickness="1,1,1,0" CornerRadius="0" Margin="2,0" Height="30">
+                                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                ContentSource="Header" Margin="10,2"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <Border x:Name="selectedBorder" Height="2" VerticalAlignment="Bottom" Background="#FF00AFFC"></Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="selectedBorder" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="gdBorder" Property="Background" Value="#333333" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="selectedBorder" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="gdBorder" Property="Background" Value="#111111" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="Credentials" >
+                <StackPanel Grid.Column="1" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="Enter the credentials of the DLR Robot." />
+                    <TextBlock Text="The Robot MUST have a PREMIUM license and ADMIN access to all stories." TextWrapping="Wrap" FontSize="12" Foreground="Gray" />
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Server:" Foreground="#FF00AFFC"></TextBlock>
+                        <TextBox Width="300" Text="{Binding Url, Mode=TwoWay}" x:Name="tbUrl" ></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Username:" Foreground="#FF00AFFC"></TextBlock>
+                        <TextBox Width="300" Text="{Binding UserName, Mode=TwoWay}" x:Name="tbUsername" ></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Password:" Foreground="#FF00AFFC"></TextBlock>
+                        <PasswordBox Width="300"  x:Name="tbPassword" ></PasswordBox>
+                    </StackPanel>
+                    <Grid >
+                        <CheckBox Foreground="#FF00AFFC" IsChecked="{Binding RememberPassword}" Margin="105,0">Remember password</CheckBox>
+                        <Button HorizontalAlignment="Right" Content=" Clear " Margin="5,0"  Background="#00AFFC" Foreground="White" Click="ClickClearPassword"/>
+                    </Grid>
+                    <Button Content="Save and validate" Width="300" HorizontalAlignment="Left" Margin="105,5,5,5"  Background="#00AFFC" Foreground="White"  Click="SaveAndValidateCLick"></Button> 
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Settings" >
+                <Grid Grid.Column="1" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="10"/>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Team:" />
+                    <Button Grid.Row="0" Grid.Column="1" Width="30" Background="#00AFFC" Foreground="White" HorizontalAlignment="Left" Content="..." Click="SelectTeam_Click"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedTeamName}" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Portfolio:" />
+                    <Button Grid.Row="2" Grid.Column="1" Width="30" Background="#00AFFC" Foreground="White" HorizontalAlignment="Left" Content="..." Click="SelectPortfolio_Click"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding SelectedPortfolioName}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Template:" />
+                    <Button Grid.Row="1" Grid.Column="1" Width="30" Background="#00AFFC" Foreground="White" HorizontalAlignment="Left" Content="..." Click="SelectTemplate_Click"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedTemplateName}" />
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Data Folder:" />
+                    <Button Grid.Row="5" Grid.Column="1" Width="30" Background="#00AFFC" Foreground="White" HorizontalAlignment="Left" Content="..." Click="SelectFolder_Click"/>
+                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding SelectedDataFolder}" TextWrapping="Wrap"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Config Folder:" />
+                    <Button Grid.Row="6" Grid.Column="1" Width="30" Background="#00AFFC" Foreground="White" HorizontalAlignment="Left" Content="..." Click="SelectConfigFolder_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Run">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition  />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding CurrentPeriod}" VerticalAlignment="Center"/>
+                    <ListBox Margin="0,0,10,0" Grid.RowSpan="3" Grid.Row="1" ItemsSource="{Binding TeamStories}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="teamStoriesChkList" Background="#0B000000">
+                        <ListBox.ItemTemplate>
+                            <HierarchicalDataTemplate>
+                                <CheckBox Content="{Binding Name}" Foreground="White" IsChecked="{Binding IsSelected}"/>
+                            </HierarchicalDataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Background="#00AFFC" Foreground="White" Height="40" HorizontalAlignment="Center"  Margin="5,0" Content=" Select All " Click="Button_ClickSelectAll"/>
+                        <Button Background="#00AFFC" Foreground="White" Height="40" HorizontalAlignment="Center" Margin="5,0" Content=" Refresh List " Click="Button_ClickRefresh"/>
+                    </StackPanel>
+
+                    <GridSplitter Grid.Column="0" VerticalAlignment="Stretch" Width="3" Grid.RowSpan="5"></GridSplitter>
+
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <CheckBox VerticalAlignment="Center" Foreground="White" Margin="10" Content="Costs" IsChecked="True" x:Name="chCosts" />
+                        <CheckBox VerticalAlignment="Center" Foreground="White" Margin="10" Content="Risks" IsChecked="True" x:Name="chRisks" />
+                        <CheckBox VerticalAlignment="Center" Foreground="White" Margin="10" Content="Milestones" IsChecked="True" x:Name="chMilestones" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Grid.Row="1" Background="#00AFFC" Foreground="White" Height="40" HorizontalAlignment="Center" Content="   Run Process Now...   " Click="StartProcess_Click"/>
+
+                    <ProgressBar Grid.Column="1" Grid.Row="2" Height="40" Width="Auto" Maximum="{Binding ProgressRange}" Value="{Binding ProgressValue}" Background="Transparent" Foreground="#00AFFC" BorderThickness="0"/>
+
+                    <TextBox Grid.Column="1" Margin="10,0,0,0" IsReadOnly="True" FontSize="14" Grid.Row="3"  AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Foreground="#00AFFC" Background="Transparent"  Text="{Binding Logs}" />
+
+                    <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Background="#00AFFC" Foreground="White" Height="40" HorizontalAlignment="Center"  Margin="5,0" Content=" View Logs... " Click="Button_ClickSelectViewLogs"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
