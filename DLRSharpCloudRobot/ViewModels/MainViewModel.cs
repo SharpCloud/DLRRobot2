@@ -113,6 +113,12 @@ namespace DLRSharpCloudRobot.ViewModels
             OnPropertyChanged("TeamStories");
         }
 
+        public void ClearLogs()
+        {
+            _logs = string.Empty;
+            OnPropertyChanged("Logs");
+        }
+
         public string Logs
         {
             get { return _logs; }

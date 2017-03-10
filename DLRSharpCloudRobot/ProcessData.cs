@@ -69,6 +69,8 @@ namespace DLRSharpCloudRobot
 
         public void ProcessDataNow(bool bKillExcels, bool bCosts, bool bRisks, bool bMilestones, List<StoryLite2> stories)
         {
+            _vm.ClearLogs();
+            _errCount = 0;
             _vm.ShowWaitForm = true;
             try
             {
@@ -636,7 +638,7 @@ namespace DLRSharpCloudRobot
 
         private void RunStoryCalcsForNazir(Story story)
         {
-            var itemFinalYear = story.Item_FindByName(ConfigurationManager.AppSettings["NFYearItem"]);
+            var itemFinalYear = story.Item_FindByName(string.Format(ConfigurationManager.AppSettings["NFYearItem"],_period));
             if (itemFinalYear == null)
             {
                 LogError("93 Final year Financial Item not found");
