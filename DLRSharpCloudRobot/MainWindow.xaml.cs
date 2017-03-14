@@ -158,5 +158,10 @@ namespace DLRSharpCloudRobot
             System.Diagnostics.Process.Start("explorer.exe", _viewModel.SelectedDataFolder);
         }
 
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            tb.ScrollToEnd();
+        }
     }
 }

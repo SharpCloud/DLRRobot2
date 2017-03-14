@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:DLRSharpCloudRobot.Converters"
         xmlns:viewModels="clr-namespace:DLRSharpCloudRobot.ViewModels"
         mc:Ignorable="d"
-        Title="SharpCloud DLR Robot v2.0" MinHeight="450" MinWidth="625" Height="450" Width="625" Background="Black" FontSize="18">
+        Title="SharpCloud DLR Robot v2.1" MinHeight="450" MinWidth="625" Height="450" Width="625" Background="Black" FontSize="18">
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
@@ -169,7 +169,7 @@
 
                     <ProgressBar Grid.Column="1" Grid.Row="2" Height="40" Width="Auto" Maximum="{Binding ProgressRange}" Value="{Binding ProgressValue}" Background="Transparent" Foreground="#00AFFC" BorderThickness="0"/>
 
-                    <TextBox Grid.Column="1" Margin="10,0,0,0" IsReadOnly="True" FontSize="14" Grid.Row="3"  AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Foreground="#00AFFC" Background="Transparent"  Text="{Binding Logs}" />
+                    <TextBox Grid.Column="1" TextChanged="textBox_TextChanged" Margin="10,0,0,0" IsReadOnly="True" FontSize="14" Grid.Row="3" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Foreground="#00AFFC" Background="Transparent"  Text="{Binding Logs}" />
 
                     <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Background="#00AFFC" Foreground="White" Height="40" HorizontalAlignment="Center"  Margin="5,0" Content=" View Logs... " Click="Button_ClickSelectViewLogs"/>
