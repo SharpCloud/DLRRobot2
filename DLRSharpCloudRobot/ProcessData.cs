@@ -185,40 +185,51 @@ namespace DLRSharpCloudRobot
                                 var projectStory = sc2.LoadStory(teamStory.Id);
 
                                 // find the item in the project story 
+                                var thisPeriod = _period;
+                                if (thisPeriod == 14)
+                                    thisPeriod = 13;
                                 var projectStatusItemName =
-                                    string.Format(ConfigurationManager.AppSettings["rollupMainStatusItem"], _period);
+                                    string.Format(ConfigurationManager.AppSettings["rollupMainStatusItem"], thisPeriod);
                                 if (!string.IsNullOrEmpty(projectStatusItemName))
                                 {
                                     var projectStatusItem = projectStory.Item_FindByName(projectStatusItemName);
                                     if (projectStatusItem != null)
                                     {
-                                        LoadPeriodDates(projectStory);
-
-                                        if (_firstDayOfPeriod)
-                                        {
-                                            CopyAllItemDataToNextPeriod(projectStory);
-                                            CopySpecificItemDataToNextPeriod(projectStory);
-                                        }
-
                                         var portfolioItemID =
                                             projectStatusItem.GetAttributeValueAsText(GetAttribute(projectStory,
                                                 "rollupMainAttribute"));
-                                        if (bCosts)
-                                            ImportCosts(projectStory, portfolioItemID);
-                                        //ImportBaseslineCosts(XL2, wbCosts, projectStory, portfolioItemID);
-                                        if (bMilestones)
-                                            ImportMilestones(projectStory, portfolioItemID);
-                                        if (bRisks)
-                                            ImportRisks(projectStory, portfolioItemID);
 
-                                        RunPendingStoryChanges(projectStory);
-                                        RunStoryCalcs(projectStory);
-                                        RunStoryCalcsForNazir(projectStory);
-                                        RunEFCCals(projectStory);
+                                        if (_period != 14)
+                                        {
+                                            LoadPeriodDates(projectStory);
 
-                                        SetStoryPanels(projectStory);
+                                            if (_firstDayOfPeriod)
+                                            {
+                                                CopyAllItemDataToNextPeriod(projectStory);
+                                                CopySpecificItemDataToNextPeriod(projectStory);
+                                            }
 
-                                        SaveStory(projectStory);
+                                            if (bCosts)
+                                                ImportCosts(projectStory, portfolioItemID);
+                                            //ImportBaseslineCosts(XL2, wbCosts, projectStory, portfolioItemID);
+                                            if (bMilestones)
+                                                ImportMilestones(projectStory, portfolioItemID);
+                                            if (bRisks)
+                                                ImportRisks(projectStory, portfolioItemID);
+
+                                            RunPendingStoryChanges(projectStory);
+                                            RunStoryCalcs(projectStory);
+                                            RunStoryCalcsForNazir(projectStory);
+                                            RunEFCCals(projectStory);
+
+                                            SetStoryPanels(projectStory);
+
+                                            SaveStory(projectStory);
+                                        }
+                                        else
+                                        {
+                                            Log("Period 14 - just rollup to portfolio");
+                                        }
 
                                         if (!string.IsNullOrEmpty(portfolioItemID))
                                         {
@@ -424,6 +435,8 @@ namespace DLRSharpCloudRobot
             int period = _period - 1; // portfolio looks at prior period
             if (period == 0) // i
                 period = 1;
+            if (period == 14) 
+                period = 13; // end of year - help Jason :-)
             string itemConfigName = text + "StatusItem";
             string itemName = string.Format(ConfigurationManager.AppSettings[itemConfigName], period);
             var item = projectStory.Item_FindByName(itemName);
