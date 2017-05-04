@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:DLRSharpCloudRobot.Converters"
         xmlns:viewModels="clr-namespace:DLRSharpCloudRobot.ViewModels"
         mc:Ignorable="d"
-        Title="SharpCloud DLR Robot v2.2" MinHeight="450" MinWidth="625" Height="450" Width="625" Background="Black" FontSize="18">
+        Title="SharpCloud DLR Robot v2.3" MinHeight="450" MinWidth="625" Height="450" Width="625" Background="Black" FontSize="18">
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
